@@ -36,7 +36,6 @@ def getbatchdata(company_id_list, fields = FIELDS):
     # stores env_path for api key in .env file
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     load_dotenv(dotenv_path = env_path)
-
     APIKEY = os.getenv('DEALROOMAPIKEY')
     URL = 'https://api.dealroom.co/api/v1'
 
@@ -69,10 +68,28 @@ def getfulldata(csv):
             i_batch = id_deeptech[i:i+50]
             data_i = getbatchdata(i_batch)
             data = pd.concat([data, data_i], axis=0)
-
         elif i == 450:
             i_batch = id_deeptech[450:len(id_deeptech)]
             data_i = getbatchdata(i_batch)
             data = pd.concat([data, data_i], axis=0)
+
     data.to_csv('deeptech_df.csv')
+
     return data
+
+
+def bulk_search(**kwargs):
+    '''Bulk search is for searching multiple company by keywords in the name or the website'''
+
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    load_dotenv(dotenv_path = env_path)
+    APIKEY = os.getenv('DEALROOMAPIKEY')
+    URL = 'https://api.dealroom.co/api/v1/companies/bulk'
+
+    response = requests.post(
+                        url = URL,\
+                        auth = (APIKEY, ''),\
+                        data = kwargs)
+
+    data = response.json()['items']
+    return pd.DataFrame(data)

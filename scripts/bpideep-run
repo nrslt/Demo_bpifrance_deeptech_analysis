@@ -6,20 +6,20 @@ from os.path import split
 import argparse
 import pandas as pd
 
-# Import from bpifrance_deeptech
-import bpifrance_deeptech
-from bpifrance_deeptech.lib import clean_data
+# Import from bpideep
+import bpideep
+from bpideep.lib import clean_data
 
 if __name__ == '__main__':
     usage = '%(prog)s'
-    description = 'bpifrance_deeptech_description'
+    description = 'bpideep_description'
     # https://docs.python.org/3/library/argparse.html
     # https://docs.python.org/3/howto/argparse.html
     parser = argparse.ArgumentParser(description=description, usage=usage)
     args = parser.parse_args()
-    folder_source, _ = split(bpifrance_deeptech.__file__)
+    folder_source, _ = split(bpideep.__file__)
     df = pd.read_csv('{}/data/data.csv.gz'.format(folder_source))
-    print('  bpifrance_deeptech/data/data.csv.gz Loaded')
+    print('  bpideep/data/data.csv.gz Loaded')
 
     res = clean_data(df)
     res.to_csv('out.csv', index=False)

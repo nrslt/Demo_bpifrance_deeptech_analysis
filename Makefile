@@ -5,10 +5,10 @@ install_requirements:
 	@pip install -r requirements.txt
 
 check_code:
-	@flake8 scripts/* bpifrance_deeptech/*.py
+	@flake8 scripts/* bpideep/*.py
 
 black:
-	@black scripts/* bpifrance_deeptech/*.py
+	@black scripts/* bpideep/*.py
 
 test:
 	@coverage run -m pytest tests/*.py
@@ -22,8 +22,8 @@ clean:
 	@rm -f .coverage
 	@rm -fr */__pycache__ */*.pyc __pycache__
 	@rm -fr build dist
-	@rm -fr bpifrance_deeptech-*.dist-info
-	@rm -fr bpifrance_deeptech.egg-info
+	@rm -fr bpideep-*.dist-info
+	@rm -fr bpideep.egg-info
 
 install:
 	@pip install . -U

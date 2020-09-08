@@ -1,5 +1,5 @@
 # Data analysis
-- Document here the project: bpifrance_deeptech
+- Document here the project: bpideep
 - Description: Project Description
 - Data Source:
 - Type of analysis:
@@ -22,15 +22,15 @@ Unittest test:
   $ make clean install test
 ```
 
-Check for bpifrance_deeptech in gitlab.com/{group}.
+Check for bpideep in gitlab.com/{group}.
 If your project is not set please add it:
 
-- Create a new project on `gitlab.com/{group}/bpifrance_deeptech`
+- Create a new project on `gitlab.com/{group}/bpideep`
 - Then populate it:
 
 ```bash
-  $ ##   e.g. if group is "{group}" and project_name is "bpifrance_deeptech"
-  $ git remote add origin git@gitlab.com:{group}/bpifrance_deeptech.git
+  $ ##   e.g. if group is "{group}" and project_name is "bpideep"
+  $ git remote add origin git@gitlab.com:{group}/bpideep.git
   $ git push -u origin master
   $ git push -u origin --tags
 ```
@@ -38,10 +38,10 @@ If your project is not set please add it:
 Functionnal test with a script:
 ```bash
   $ cd /tmp
-  $ bpifrance_deeptech-run
+  $ bpideep-run
 ```
 # Install
-Go to `gitlab.com/{group}/bpifrance_deeptech` to see the project, manage issues,
+Go to `gitlab.com/{group}/bpideep` to see the project, manage issues,
 setup you ssh public key, ...
 
 Create a python3 virtualenv and activate it:
@@ -52,19 +52,19 @@ Create a python3 virtualenv and activate it:
 
 Clone the project and install it:
 ```bash
-  $ git clone gitlab.com/{group}/bpifrance_deeptech
-  $ cd bpifrance_deeptech
+  $ git clone gitlab.com/{group}/bpideep
+  $ cd bpideep
   $ pip install -r requirements.txt
   $ make clean install test                # install and test
 ```
 Functionnal test with a script:
 ```bash
   $ cd /tmp
-  $ bpifrance_deeptech-run
-``` 
+  $ bpideep-run
+```
 
 # Continus integration
-## Github 
+## Github
 Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
 ## Gitlab
 Every push of `master` branch will execute `.gitlab-ci.yml` docker jobs.

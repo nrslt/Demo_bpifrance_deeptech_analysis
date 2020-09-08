@@ -1,3 +1,3 @@
-graft bpifrance_deeptech
+graft bpideep
 global-exclude *.py[cod] __pycache__ *.so *.ipynb
-recursive-exclude  bpifrance_deeptech/jupy *
+recursive-exclude  bpideep/jupy *

@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 # Copyright (C) 2018 Jean Bizot <jean@styckr.io>
-""" Main lib for bpifrance_deeptech Project
+""" Main lib for bpideep Project
 """
 
 from os.path import split
@@ -50,8 +50,8 @@ def clean_data(data):
 
 if __name__ == '__main__':
     # For introspections purpose to quickly get this functions on ipython
-    import bpifrance_deeptech
-    folder_source, _ = split(bpifrance_deeptech.__file__)
+    import bpideep
+    folder_source, _ = split(bpideep.__file__)
     df = pd.read_csv('{}/data/data.csv.gz'.format(folder_source))
     clean_data = clean_data(df)
     print(' dataframe cleaned')

@@ -33,20 +33,16 @@ class CompaniesFilter():  #Class to get an overview of the filters usable in the
                          'total_funding_min',
                          'total_funding_max']   #empty filters : 'last_updated','last_updated_utc', 'launch_year_min','launch_year_max'
 
-        self.api = os.getenv("DEALROOMAPIKEY")
-
-        self.test = '12323'
-
 
     def get_categories(self, filt):
-
-        path = os.path.join(os.path.dirname(__file__), 'data/companies_filters.json')
+        ''' functions that return all the categories of a given filter'''
+        path = os.path.join(os.path.dirname(__file__), 'data/companies_filters.txt')
         with open(path, 'r') as f:
             r_json = json.load(f)
+            r_json = r_json['items']
 
-        categories = r.json()['items']
-
-        for dic in categories:
+        categories = []
+        for dic in r_json:
             if dic['key'] == filt:
                 for d in dic['items']:
                     categories.append(d['name'])
@@ -54,19 +50,20 @@ class CompaniesFilter():  #Class to get an overview of the filters usable in the
         print('filter not found')
 
 
-    def get_filters(self):
-        '''Method to get the list of filters '''
-        URL = 'https://api.dealroom.co/api/v1/companies/filters'
+    # def get_filters(self):
+    #     '''Method to get the list of filters '''
+    #     URL = 'https://api.dealroom.co/api/v1/companies/filters'
 
-        print(self.api)
-        auth = (self.api,'')
+    #     env_path = os.path.join(os.path.dirname(__file__), ".env")
+    #     load_dotenv(dotenv_path = env_path)
+    #     APIKEY = os.getenv('DEALROOMAPIKEY')
 
-        r = requests.post(URL ,auth=auth).json()
+    #     r = requests.post(URL ,auth=(APIKEY,'')).json()
 
-        path = os.path.join(os.path.dirname(__file__), 'data/companies_filters.txt')
+    #     path = os.path.join(os.path.dirname(__file__), 'data/companies_filters.txt')
 
-        with open(path, 'w') as outfile:
-            json.dump(r, outfile)
+    #     with open(path, 'w') as outfile:
+    #         json.dump(r, outfile)
 
 
 

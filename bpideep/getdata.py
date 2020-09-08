@@ -4,9 +4,11 @@
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 import os
 
-APIKEY = os.environ.get('DEALROOMAPIKEY')
+APIKEY = os.getenv('DEALROOMAPIKEY')
 URL = 'https://api.dealroom.co/api/v1'
 
 print(APIKEY)

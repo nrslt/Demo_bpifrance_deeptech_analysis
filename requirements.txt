@@ -9,4 +9,4 @@ black
 yapf
 python-gitlab
 twine
-dotenv
+python-dotenv

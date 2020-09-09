@@ -11,7 +11,6 @@ import os
 
 
 
-
 def company_tolist(id_csv_file):
     """takes the csv name of deeptech id list (as 'file_name.csv') \
     and returns the flatten python list"""
@@ -109,8 +108,9 @@ def getfulldata(company_csv_file, fields_txt_file):
             data_i = getbatchdata(i_batch, fields_list)
             data = pd.concat([data, data_i], axis=0, ignore_index=True)
 
+    output_path = os.path.join(os.path.dirname(__file__), "rawdata")
     company_type = company_csv_file.replace('.csv', '')
-    data.to_csv(f'rawdata/{company_type}_df.csv')
+    data.to_csv(f'{output_path}/{company_type}_df.csv')
 
     return data
 

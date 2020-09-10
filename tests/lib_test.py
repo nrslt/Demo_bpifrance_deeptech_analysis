@@ -18,3 +18,6 @@ import pytest
 #     assert df.shape == (999, 142)
 #     out = clean_data(df)
 #     assert out.shape == (985, 119)
+
+def test_clean_data():
+    pass

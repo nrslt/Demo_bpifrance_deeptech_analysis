@@ -200,6 +200,7 @@ def return_ratio(x):
 
 
 
+
 def feat_eng(data):
     '''
     takes a pandas df as input
@@ -210,7 +211,7 @@ def feat_eng(data):
     # new features in data as columns
     data['background_team'] = data['team'].map(lambda x:background(x))
     data['degree_team'] = data['team'].map(lambda x:degree(x))
-    data['doctor'] = data['degree_team'].map(lambda x: degree_quant(x))
+    data['doctor_yesno'] = data['degree_team'].map(lambda x: degree_quant(x))
     data['funding_employees_ratio'] = funding_amounts_employees(data)
     data['has_strong_founder'] = data['has_strong_founder'].map({True : 1,
                                                                 False : 0})
@@ -242,7 +243,7 @@ def feat_eng(data):
 
     # to concat
     concat_df = pd.concat([
-                        data[['doctor',
+                        data[['doctor_yesno',
                             'funding_employees_ratio',
                             'has_strong_founder',
                             'has_super_founder',
@@ -258,7 +259,31 @@ def feat_eng(data):
                         data[['target']]
                         ], axis = 1)
 
-    return concat_df
+    # we keep a trace of all features list (by group of features)
+    simple_features = ['doctor_yesno',
+                        'funding_employees_ratio',
+                        'has_strong_founder',
+                        'has_super_founder',
+                        'stage_age_ratio']
+    tags_features = tags_retained.columns.tolist()
+    background_features = background_retained.columns.tolist()
+    insudtries_features = industries_retained.columns.tolist()
+    subindustries_features = subindustries_retained.columns.tolist()
+    degree_team_features = degree_team_encoded_df.columns.tolist()
+    income_streams_features = income_streams_encoded_df.columns.tolist()
+    technologies_features = technologies_encoded_df.columns.tolist()
+
+    # and store these lists in a dict that is returned along with the new concat_df
+    features_dict = {}
+    features_dict['simple_features'] = simple_features
+    features_dict['tags_features'] = tags_features
+    features_dict['background_features'] = background_features
+    features_dict['subindustries_features'] = subindustries_features
+    features_dict['degree_team_features'] = degree_team_features
+    features_dict['income_streams_features'] = income_streams_features
+    features_dict['technologies_features'] = technologies_features
+
+    return concat_df, features_dict
 
 
 

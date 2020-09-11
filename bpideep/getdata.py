@@ -163,6 +163,10 @@ def getfulldata(company_dict, fields_txt_file):
     # concatenates the three dataframes
     data = pd.concat([deep_df, nondeep_df, almostdeep_df], axis = 0, ignore_index = True)
 
+    # drop duplicates
+    data.drop_duplicates(inplace = True)
+    data.reset_index(drop = True, inplace = True)
+
     output_path = os.path.join(os.path.dirname(__file__), "rawdata")
     data.to_csv(f'{output_path}/data.csv', index = False)
 

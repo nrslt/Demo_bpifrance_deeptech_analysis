@@ -177,6 +177,7 @@ def getfulldata(company_dict, fields_txt_file):
 
 
 
+
 def bulk_search(**kwargs):
     '''Bulk search is for searching multiple company by keywords in the name or the website'''
 

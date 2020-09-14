@@ -1,8 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import ast
+import os
 
-
+data_path = os.path.join(os.path.dirname(__file__), "data")
+patents_df = pd.read_csv(f"{data_path}/patents.csv")
 
 def encoder(data, column):
     '''
@@ -263,21 +265,22 @@ def feat_eng(data):
 
 
     # processed encoded features
-    tags_retained = tags_reduction(tags_encoded_df, threshold = 0.02)
-    background_retained = tags_reduction(background_team_encoded_df, threshold = 0.01)
-    industries_retained = tags_reduction(industries_encoded_df, threshold = 0.01)
+    # tags_retained = tags_reduction(tags_encoded_df, threshold = 0.02)
+    # background_retained = tags_reduction(background_team_encoded_df, threshold = 0.01)
+    # industries_retained = tags_reduction(industries_encoded_df, threshold = 0.01)
 
     # to concat
     concat_df = pd.concat([
-                        data[['doctor_yesno',
+                        data[['id',
+                            'doctor_yesno',
                             'funding_employees_ratio',
                             'has_strong_founder',
                             'has_super_founder',
                             'stage_age_ratio'
                             ]],
-                        tags_retained,
-                        background_retained,
-                        industries_retained,
+                        tags_encoded_df.drop(columns = 'health'),
+                        background_team_encoded_df,
+                        industries_encoded_df,
                         degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
@@ -286,33 +289,38 @@ def feat_eng(data):
                         data[['target']]
                         ], axis = 1)
 
+    # merge concat_df with patents to get patents info
+    concat_df = concat_df.merge(patents_df[['nb_patents', 'id']], on = 'id')
+
     # we keep a trace of all features list (by group of features)
-    simple_features = ['doctor_yesno',
+    simple_features = ['id',
+                        'doctor_yesno',
                         'funding_employees_ratio',
                         'has_strong_founder',
                         'has_super_founder',
-                        'stage_age_ratio']
-    tags_features = tags_retained.columns.tolist()
-    background_features = background_retained.columns.tolist()
-    industries_features = industries_retained.columns.tolist()
-    degree_team_features = degree_team_encoded_df.columns.tolist()
-    income_streams_features = income_streams_encoded_df.columns.tolist()
-    technologies_features = technologies_encoded_df.columns.tolist()
-    investors_name_features = investors_name_encoded_df.columns.tolist()
-    investors_type_features = investors_type_encoded_df.columns.tolist()
+                        'stage_age_ratio',
+                        'nb_patents']
+    # tags_features = tags_retained.columns.tolist()
+    # background_features = background_retained.columns.tolist()
+    # industries_features = industries_retained.columns.tolist()
+    # degree_team_features = degree_team_encoded_df.columns.tolist()
+    # income_streams_features = income_streams_encoded_df.columns.tolist()
+    # technologies_features = technologies_encoded_df.columns.tolist()
+    # investors_name_features = investors_name_encoded_df.columns.tolist()
+    # investors_type_features = investors_type_encoded_df.columns.tolist()
 
 
     # and store these lists in a dict that is returned along with the new concat_df
-    features_dict = {}
-    features_dict['simple_features'] = simple_features
-    features_dict['tags_features'] = tags_features
-    features_dict['background_features'] = background_features
-    features_dict['industries_features'] = industries_features
-    features_dict['degree_team_features'] = degree_team_features
-    features_dict['income_streams_features'] = income_streams_features
-    features_dict['technologies_features'] = technologies_features
-    features_dict['investors_name'] = investors_name_features
-    features_dict['investors_type'] = investors_type_features
+    # features_dict = {}
+    # features_dict['simple_features'] = simple_features
+    # features_dict['tags_features'] = tags_features
+    # features_dict['background_features'] = background_features
+    # features_dict['industries_features'] = industries_features
+    # features_dict['degree_team_features'] = degree_team_features
+    # features_dict['income_streams_features'] = income_streams_features
+    # features_dict['technologies_features'] = technologies_features
+    # features_dict['investors_name'] = investors_name_features
+    # features_dict['investors_type'] = investors_type_features
 
 
     # selection of columns to keep
@@ -330,7 +338,7 @@ def feat_eng(data):
     kept_columns = simple_features + kept_tags
     kept_columns.append('target')
 
-    return concat_df[kept_columns], features_dict
+    return concat_df[kept_columns]
 
 
 

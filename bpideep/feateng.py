@@ -93,7 +93,6 @@ def background(x):
 
 
 
-
 def degree(x):
     '''
     function that extracts the degree name from the 'team' column in data
@@ -109,7 +108,6 @@ def degree(x):
                 degree = universities[0]['degree']['name']
                 degree_list.append(degree)
     return degree_list
-# data['degree_team'] = data['team'].map(lambda x:degree(x))
 
 
 
@@ -130,7 +128,6 @@ def degree_quant(x):
                 return 1
             else :
                 return 0
-# data['doctor'] = data['degree_team'].map(lambda x: degree_quant(x))
 
 
 
@@ -170,6 +167,29 @@ def industries(x):
             industries_list.append(industries[u]['name'])
     return industries_list
 
+
+def investors_name(x) :
+        investors_list = []
+        investors = ast.literal_eval(x)
+        if investors['total'] > 0 :
+            for y in range(len(investors['items'])):
+                    investors_list.append(investors['items'][y]['name'])
+        return investors_list
+
+
+
+def investors_type(x) :
+        investors_list = []
+        investors = ast.literal_eval(x)
+        if investors['total'] > 0 :
+            for y in range(len(investors['items'])):
+                    investors_list.append(investors['items'][y]['type'])
+        return investors_list
+
+
+
+
+
 def tags_reduction(encoded_dataframe, threshold = 0.02):
     '''
     function that performs a dimension reduction operation: \
@@ -182,6 +202,8 @@ def tags_reduction(encoded_dataframe, threshold = 0.02):
     retained_tags = tags_series_count[tags_series_count > threshold].index.tolist()
 
     return encoded_dataframe[retained_tags]
+
+
 
 
 def substract_date(x):
@@ -224,22 +246,26 @@ def feat_eng(data):
     data['year_of_existence'] = data['year'].map(lambda x : substract_date(x))
     data['stage_age_ratio'] = data[['year_of_existence','growth_stage_num']]\
                                 .apply(return_ratio,axis=1)
+    data['investors_name'] = data['investors'].map(lambda x:investors_name(x))
+    data['investors_type'] = data['investors'].map(lambda x:investors_type(x))
+
 
 
     # encoded features
     background_team_encoded_df = encoder(data, 'background_team')
     degree_team_encoded_df = encoder(data,'degree_team')
     industries_encoded_df = encoder(data,'industries_list')
-    sub_industries_encoded_df = encoder(data, 'sub_industries')
     income_streams_encoded_df = encoder(data,'income_streams')
     technologies_encoded_df = encoder(data,'technologies')
     tags_encoded_df = encoder(data,'tags')
+    investors_name_encoded_df = encoder(data, 'investors_name')
+    investors_type_encoded_df = encoder(data, 'investors_type')
+
 
     # processed encoded features
     tags_retained = tags_reduction(tags_encoded_df, threshold = 0.02)
     background_retained = tags_reduction(background_team_encoded_df, threshold = 0.01)
     industries_retained = tags_reduction(industries_encoded_df, threshold = 0.01)
-    subindustries_retained = tags_reduction(sub_industries_encoded_df, threshold = 0.01)
 
     # to concat
     concat_df = pd.concat([
@@ -252,10 +278,11 @@ def feat_eng(data):
                         tags_retained,
                         background_retained,
                         industries_retained,
-                        subindustries_retained,
                         degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
+                        investors_name_encoded_df,
+                        investors_type_encoded_df,
                         data[['target']]
                         ], axis = 1)
 
@@ -267,23 +294,43 @@ def feat_eng(data):
                         'stage_age_ratio']
     tags_features = tags_retained.columns.tolist()
     background_features = background_retained.columns.tolist()
-    insudtries_features = industries_retained.columns.tolist()
-    subindustries_features = subindustries_retained.columns.tolist()
+    industries_features = industries_retained.columns.tolist()
     degree_team_features = degree_team_encoded_df.columns.tolist()
     income_streams_features = income_streams_encoded_df.columns.tolist()
     technologies_features = technologies_encoded_df.columns.tolist()
+    investors_name_features = investors_name_encoded_df.columns.tolist()
+    investors_type_features = investors_type_encoded_df.columns.tolist()
+
 
     # and store these lists in a dict that is returned along with the new concat_df
     features_dict = {}
     features_dict['simple_features'] = simple_features
     features_dict['tags_features'] = tags_features
     features_dict['background_features'] = background_features
-    features_dict['subindustries_features'] = subindustries_features
+    features_dict['industries_features'] = industries_features
     features_dict['degree_team_features'] = degree_team_features
     features_dict['income_streams_features'] = income_streams_features
     features_dict['technologies_features'] = technologies_features
+    features_dict['investors_name'] = investors_name_features
+    features_dict['investors_type'] = investors_type_features
 
-    return concat_df, features_dict
+
+    # selection of columns to keep
+    kept_tags = ['technical',
+                 'health',
+                 'semiconductors',
+                 'energy',
+                 'commission',
+                 'biotechnology',
+                 'neurology',
+                 'saas',
+                 'fund',
+                 'Agoranov']
+
+    kept_columns = simple_features + kept_tags
+    kept_columns.append('target')
+
+    return concat_df[kept_columns], features_dict
 
 
 

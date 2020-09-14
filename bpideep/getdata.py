@@ -112,8 +112,11 @@ def getbatchdata(company_id_list, fields_list):
                         url = f'{URL}/companies/batch?ids={companies_string}&fields={fields_string}',\
                         auth = (APIKEY, '')
                         )
-
-    data = response.json()['items']
+    try :
+        data = response.json()['items']
+    except:
+        data = response.json()
+        return data
 
     return pd.DataFrame(data)
 
@@ -164,7 +167,7 @@ def getfulldata(company_dict, fields_txt_file):
     data = pd.concat([deep_df, nondeep_df, almostdeep_df], axis = 0, ignore_index = True)
 
     # drop duplicates
-    data.drop_duplicates(inplace = True)
+    data.drop_duplicates(subset = 'id', inplace = True)
     data.reset_index(drop = True, inplace = True)
 
     output_path = os.path.join(os.path.dirname(__file__), "rawdata")

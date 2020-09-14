@@ -126,7 +126,8 @@ def bulk_search(**kwargs):
     response = requests.post(
                         url = URL,\
                         auth = (APIKEY, ''),\
-                        data = kwargs)
+                        data = kwargs,
+                        headers={"Content-Type": "application/json"})
 
 
     try :

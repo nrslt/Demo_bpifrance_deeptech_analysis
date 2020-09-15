@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import ast
 import os
 import numpy as np
+from bpideep import list_industries,list_technologies,list_tags,list_background_team,list_degree_team,list_income_streams,list_investors_name,list_investor_type
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
@@ -370,17 +371,46 @@ def feat_eng_new_entry(data):
     data['investors_name'] = data['investors'].map(lambda x:investors_name(x))
     data['investors_type'] = data['investors'].map(lambda x:investors_type(x))
 
+    def encoder_predict(data, column, list_):
+    '''
+    encoder function that takes a pandas dataframe (data) \
+    and a column name (str) as parameters
+    returns a new_df with OHE-like columns
+    '''
+        list_ = return_list(data,column)
+        new_df = pd.DataFrame(columns= list_)
+        for u in range(len(data)):
+            data_ = data[column][u]
+            dict_ = {}
+            for n in list_:
+                if type(data_) == str:
+                    company_ = ast.literal_eval(data_)
+                    if n in company_:
+                        encoder = 1
+                    else:
+                        encoder = 0
+                    dict_[n] = encoder
+                elif type(data_) == list:
+                    company_ = data_
+                    if n in company_:
+                        encoder = 1
+                    else:
+                        encoder = 0
+                    dict_[n] = encoder
+            new_df.loc[u] = dict_
+        return new_df
+
 
     # encoded features
-    background_team_encoded_df = encoder(data, 'background_team')
-    # degree_team_encoded_df = encoder(data,'degree_team')
-    industries_encoded_df = encoder(data,'industries_list')
-    income_streams_encoded_df = encoder(data,'income_streams')
-    technologies_encoded_df = encoder(data,'technologies')
-    tags_encoded_df = encoder(data,'tags')
-    investors_name_encoded_df = encoder(data, 'investors_name')
-    investors_type_encoded_df = encoder(data, 'investors_type')
 
+    background_team_encoded_df = encoder_predict(data, 'background_team', list_background_team)
+    degree_team_encoded_df = encoder_predict(data,'degree_team',list_degree_team)
+    industries_encoded_df = encoder_predict(data,'industries_list',list_industries)
+    income_streams_encoded_df = encoder_predict(data,'income_streams',list_income_streams)
+    technologies_encoded_df = encoder_predict(data,'technologies',list_technologies)
+    tags_encoded_df = encoder_predict(data,'tags',list_tags)
+    investors_name_encoded_df = encoder_predict(data, 'investors_name',list_investors_name)
+    investors_type_encoded_df = encoder_predict(data, 'investors_type',list_investor_type)
 
     # to concat
     concat_df = pd.concat([

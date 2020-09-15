@@ -26,14 +26,12 @@ def predict():
     X = company_search(name)
     if X.empty:
         return 'Company name not found on DealRoom'
-    import ipdb; ipdb.set_trace()
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)
 
-
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
-    return {"predictions": results}
+    return {"predictions": str(results[0])}
 
     # TODO
     # create an X_pred dataframe from request.args

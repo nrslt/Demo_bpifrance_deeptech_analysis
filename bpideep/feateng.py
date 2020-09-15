@@ -344,7 +344,91 @@ def feat_eng(data):
 
 
 
+def feat_eng_new_entry(data):
+    '''
+    takes a pandas df as input
+    global feature engineering function that performs all above mentioned \
+    transformations and returns a new dataframe
+    '''
 
+    # new features in data as columns
+    data['background_team'] = data['team'].map(lambda x:background(x))
+    data['degree_team'] = data['team'].map(lambda x:degree(x))
+    data['doctor_yesno'] = data['degree_team'].map(lambda x: degree_quant(x))
+    data['funding_employees_ratio'] = funding_amounts_employees(data)
+    data['has_strong_founder'] = data['has_strong_founder'].map({True : 1,
+                                                                False : 0})
+    data['has_super_founder'] = data['has_super_founder'].map({True : 1,
+                                                               False : 0})
+    data['growth_stage_num'] = growth_stage_num(data)
+    data['industries_list'] = data['industries'].map(lambda x: industries(x))
+
+    data['year'] = pd.DataFrame({'year': data['launch_year']})
+    data['year_of_existence'] = data['year'].map(lambda x : substract_date(x))
+    data['stage_age_ratio'] = data[['year_of_existence','growth_stage_num']]\
+                                .apply(return_ratio,axis=1)
+    data['investors_name'] = data['investors'].map(lambda x:investors_name(x))
+    data['investors_type'] = data['investors'].map(lambda x:investors_type(x))
+
+
+    # encoded features
+    background_team_encoded_df = encoder(data, 'background_team')
+    degree_team_encoded_df = encoder(data,'degree_team')
+    industries_encoded_df = encoder(data,'industries_list')
+    income_streams_encoded_df = encoder(data,'income_streams')
+    technologies_encoded_df = encoder(data,'technologies')
+    tags_encoded_df = encoder(data,'tags')
+    investors_name_encoded_df = encoder(data, 'investors_name')
+    investors_type_encoded_df = encoder(data, 'investors_type')
+
+
+    # to concat
+    concat_df = pd.concat([
+                        data[['id',
+                            'doctor_yesno',
+                            'funding_employees_ratio',
+                            'has_strong_founder',
+                            'has_super_founder',
+                            'stage_age_ratio'
+                            ]],
+                        tags_encoded_df.drop(columns = 'health'),
+                        background_team_encoded_df,
+                        industries_encoded_df,
+                        degree_team_encoded_df,
+                        income_streams_encoded_df,
+                        technologies_encoded_df,
+                        investors_name_encoded_df,
+                        investors_type_encoded_df,
+                        data[['target']]
+                        ], axis = 1)
+
+
+    # we keep a trace of all features list (by group of features)
+    simple_features = ['id',
+                        'doctor_yesno',
+                        'funding_employees_ratio',
+                        'has_strong_founder',
+                        'has_super_founder',
+                        'stage_age_ratio',
+                        'nb_patents']
+
+
+    # selection of columns to keep
+    kept_tags = ['technical',
+                 'health',
+                 'semiconductors',
+                 'energy',
+                 'commission',
+                 'biotechnology',
+                 'neurology',
+                 'saas',
+                 'fund',
+                 'Agoranov']
+
+    kept_columns = simple_features + kept_tags
+    kept_columns.append('target')
+
+    return concat_df[kept_columns]
 
 
 

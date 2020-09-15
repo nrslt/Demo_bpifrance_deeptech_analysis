@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import ast
 import os
 import numpy as np
+from bpideep import list_industries,list_technologies,list_tags,list_background_team,list_degree_team,list_income_streams,list_investors_name,list_investor_type
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")

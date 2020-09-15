@@ -175,31 +175,70 @@ def getfulldata(company_dict, fields_txt_file):
 
     return data
 
+def get_df(deep_csv, nondeep_csv, almostdeep_csv):
+    """ takes the three csv files names as arguments and concat the df, \
+    returns a df
+    adds a 'deep_or_not' column
+    adds a 0 or 1 column (1 for deep, 0 for nondeep or almost deep) """
 
+    # stores the path of each csv file in a variable
+    deep_path = os.path.join(os.path.dirname(__file__), 'rawdata/', deep_csv)
+    nondeep_path = os.path.join(os.path.dirname(__file__), 'rawdata/', nondeep_csv)
+    almostdeep_path = os.path.join(os.path.dirname(__file__), 'rawdata/', almostdeep_csv)
 
+    deep = pd.read_csv(deep_path)
+    nondeep = pd.read_csv(nondeep_path)
+    almostdeep = pd.read_csv(almostdeep_path)
 
-def bulk_search(**kwargs):
-    '''Bulk search is for searching multiple company by keywords in the name or the website'''
+    # creating the 'deep_or_not' column
+    deep['deep_or_not'] = 'deeptech'
+    nondeep['deep_or_not'] = 'non_deeptech'
+    almostdeep['deep_or_not'] = 'almost_deeptech'
+
+    # creating the 'target' column
+    deep['target'] = 1
+    nondeep['target'] = 0
+    almostdeep['target'] = 0
+
+    if ((deep.columns != nondeep.columns).sum() == 0) & ((deep.columns != almostdeep.columns).sum() == 0):
+        data = pd.concat([deep, nondeep, almostdeep], axis = 0, ignore_index = True)
+
+    output_path = os.path.join(os.path.dirname(__file__), "rawdata")
+    data.to_csv(f'{output_path}/complete_df.csv')
+
+    return data
+
+def company_search(**kwargs):
 
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     load_dotenv(dotenv_path = env_path)
     APIKEY = os.getenv('DEALROOMAPIKEY')
-    URL = 'https://api.dealroom.co/api/v1/companies/bulk'
+    URL = 'https://api.dealroom.co/api/v1/companies'
 
     response = requests.post(
                         url = URL,\
                         auth = (APIKEY, ''),\
-                        data = kwargs,
-                        headers={"Content-Type": "application/json"})
+                        data = kwargs)
 
+    data = response.json()['items']
 
-    try :
-        data = response.json()['items']
-    except:
-        data = response.json()
-        return data
-    return pd.DataFrame(data)
+    return pd.DataFrame(data).head(1)
 
+# def bulk_search(**kwargs):
+#     '''Bulk search is for searching multiple company by keywords in the name or the website'''
+#     env_path = os.path.join(os.path.dirname(__file__), ".env")
+#     load_dotenv(dotenv_path = env_path)
+#     APIKEY = os.getenv('DEALROOMAPIKEY')
+#     URL = 'https://api.dealroom.co/api/v1/companies/bulk'
+
+#     response = requests.post( url = URL,auth = (APIKEY, ''),data = kwargs,headers= {"Content-Type": "application/json"} )
+
+#     try :
+#         data = response.json()['items']
+#     except:
+#         data = response.json()
+#         return data
+#     return pd.DataFrame(data)
 
 
 if __name__ == "__main__":

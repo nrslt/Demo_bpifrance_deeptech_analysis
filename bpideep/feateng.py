@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import ast
 import os
+import numpy as np
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
@@ -85,7 +86,7 @@ def background(x):
     '''
 
     backgrounds_list = []
-    team = ast.literal_eval(x)
+    team = x
     for y in range(len(team['items'])):
             backgrounds= team['items'][y]['backgrounds']
             for u in range(len(backgrounds)):
@@ -103,7 +104,7 @@ def degree(x):
     '''
 
     degree_list = []
-    team = ast.literal_eval(x)
+    team = x
     for y in range(len(team['items'])):
             universities= team['items'][y]['universities']['items']
             if universities and universities[0]['degree'] is not None :
@@ -164,29 +165,29 @@ def industries(x):
     '''
 
     industries_list = []
-    industries = ast.literal_eval(x)
+    industries = x
     for u in range(len(industries)):
             industries_list.append(industries[u]['name'])
     return industries_list
 
 
 def investors_name(x) :
-        investors_list = []
-        investors = ast.literal_eval(x)
-        if investors['total'] > 0 :
-            for y in range(len(investors['items'])):
-                    investors_list.append(investors['items'][y]['name'])
-        return investors_list
+    investors_list = []
+    investors = x
+    if investors['total'] > 0 :
+        for y in range(len(investors['items'])):
+                investors_list.append(investors['items'][y]['name'])
+    return investors_list
 
 
 
 def investors_type(x) :
-        investors_list = []
-        investors = ast.literal_eval(x)
-        if investors['total'] > 0 :
-            for y in range(len(investors['items'])):
-                    investors_list.append(investors['items'][y]['type'])
-        return investors_list
+    investors_list = []
+    investors = x
+    if investors['total'] > 0 :
+        for y in range(len(investors['items'])):
+                investors_list.append(investors['items'][y]['type'])
+    return investors_list
 
 
 
@@ -290,7 +291,7 @@ def feat_eng(data):
                         ], axis = 1)
 
     # merge concat_df with patents to get patents info
-    concat_df = concat_df.merge(patents_df[['nb_patents', 'id']], on = 'id')
+    concat_df = concat_df.merge(patents_df[['nb_patents', 'id']], on = 'id', how = 'left')
 
     # we keep a trace of all features list (by group of features)
     simple_features = ['id',

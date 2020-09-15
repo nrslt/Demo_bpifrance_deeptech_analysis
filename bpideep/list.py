@@ -12,7 +12,7 @@ list_background_team = ['biology & earth science',
  'mathematics',
  'law']
 
- list_degree_team = ['biology & earth science',
+list_degree_team = ['biology & earth science',
  'technical',
  'it',
  'business',
@@ -26,7 +26,7 @@ list_background_team = ['biology & earth science',
  'mathematics',
  'law']
 
- list_industries = ['health',
+list_industries = ['health',
  'fintech',
  'energy',
  'telecom',
@@ -53,7 +53,7 @@ list_background_team = ['biology & earth science',
  'event tech',
  'travel']
 
- list_income_streams = ['commission', 'subscription', 'selling own inventory', 'advertising']
+list_income_streams = ['commission', 'subscription', 'selling own inventory', 'advertising']
 
 list_technologies = ['big data',
  'computer vision',
@@ -76,7 +76,7 @@ list_technologies = ['big data',
  'quantum technologies',
  'natural language processing']
 
- list_investors_name = ['Agoranov', 'European Innovation Council', 'Eurostars SME programme',
+list_investors_name = ['Agoranov', 'European Innovation Council', 'Eurostars SME programme',
        'Kima Ventures', 'Idinvest Partners', 'Elaia Partners',
        'It Translation', 'Sofimac Innovation', 'Crédit Agricole',
        'Femmes Business Angels', 'Seventure Partners', 'GO Capital',
@@ -97,7 +97,7 @@ list_investor_type = ['fund',
  'crowdfunding',
  'workspace']
 
- list_tags = ['investing',
+list_tags = ['investing',
  'risk management',
  'biotechnology',
  'sustainable development goals',

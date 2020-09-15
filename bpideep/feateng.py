@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import ast
 import os
 import numpy as np
-from bpideep import list_industries,list_technologies,list_tags,list_background_team,list_degree_team,list_income_streams,list_investors_name,list_investor_type
+from bpideep.list import list_industries,list_technologies,list_tags,list_background_team,list_degree_team,list_income_streams,list_investors_name,list_investor_type
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
@@ -372,12 +372,11 @@ def feat_eng_new_entry(data):
     data['investors_type'] = data['investors'].map(lambda x:investors_type(x))
 
     def encoder_predict(data, column, list_):
-    '''
-    encoder function that takes a pandas dataframe (data) \
-    and a column name (str) as parameters
-    returns a new_df with OHE-like columns
-    '''
-        list_ = return_list(data,column)
+        '''
+        encoder function that takes a pandas dataframe (data)
+        and a column name (str) as parameters
+        returns a new_df with OHE-like columns
+        '''
         new_df = pd.DataFrame(columns= list_)
         for u in range(len(data)):
             data_ = data[column][u]
@@ -419,22 +418,22 @@ def feat_eng_new_entry(data):
                             'funding_employees_ratio',
                             'has_strong_founder',
                             'has_super_founder',
-                            'stage_age_ratio'
+                            'stage_age_ratio',
+                            'nb_patents'
                             ]],
                         tags_encoded_df.drop(columns = 'health'),
                         background_team_encoded_df,
                         industries_encoded_df,
-                        # degree_team_encoded_df,
+                        degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
                         investors_name_encoded_df,
-                        investors_type_encoded_df,
-                        data[['target']]
+                        investors_type_encoded_df
                         ], axis = 1)
 
 
     # we keep a trace of all features list (by group of features)
-    simple_features = ['id',
+    simple_features = [
                         'doctor_yesno',
                         'funding_employees_ratio',
                         'has_strong_founder',
@@ -456,7 +455,6 @@ def feat_eng_new_entry(data):
                  'Agoranov']
 
     kept_columns = simple_features + kept_tags
-    kept_columns.append('target')
 
     return concat_df[kept_columns]
 

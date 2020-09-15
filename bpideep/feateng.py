@@ -373,7 +373,7 @@ def feat_eng_new_entry(data):
 
     # encoded features
     background_team_encoded_df = encoder(data, 'background_team')
-    degree_team_encoded_df = encoder(data,'degree_team')
+    # degree_team_encoded_df = encoder(data,'degree_team')
     industries_encoded_df = encoder(data,'industries_list')
     income_streams_encoded_df = encoder(data,'income_streams')
     technologies_encoded_df = encoder(data,'technologies')
@@ -394,7 +394,7 @@ def feat_eng_new_entry(data):
                         tags_encoded_df.drop(columns = 'health'),
                         background_team_encoded_df,
                         industries_encoded_df,
-                        degree_team_encoded_df,
+                        # degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
                         investors_name_encoded_df,

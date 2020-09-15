@@ -13,3 +13,4 @@ groupama/data/base_pno.*
 .env
 rawdata/
 notebooks/
+/notebooks/

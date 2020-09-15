@@ -15,7 +15,7 @@ def index():
      return 'OK'
 
 @app.route('/predict', methods=['GET'])
-def predict_fare():
+def predict():
     name = request.args['key']
 
     # get nb of patents with Big Query
@@ -23,14 +23,17 @@ def predict_fare():
     nb_patents = patent.get_nb_patents(name)
 
     # get DealRoom datas
-    X = company_search(keyword=name, keyword_type="name", keyword_match_type="exact")
+    X = company_search(name)
+    if X.empty:
+        return 'Company name not found on DealRoom'
+
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)
 
-    pipeline = joblib.load('bpideep.joblib')
-    # results = pipeline.predict(X)
-    # return {"predictions": results}
-    return str(X.nb_patents[0])
+    pipeline = joblib.load('bpideepmodel.joblib')
+    results = pipeline.predict(X)
+    return {"predictions": results}
+
     # TODO
     # create an X_pred dataframe from request.args
     # enrich with dealroom et google patent

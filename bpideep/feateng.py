@@ -257,7 +257,7 @@ def feat_eng(data):
 
     # encoded features
     background_team_encoded_df = encoder(data, 'background_team')
-    degree_team_encoded_df = encoder(data,'degree_team')
+    # degree_team_encoded_df = encoder(data,'degree_team')
     industries_encoded_df = encoder(data,'industries_list')
     income_streams_encoded_df = encoder(data,'income_streams')
     technologies_encoded_df = encoder(data,'technologies')
@@ -283,7 +283,7 @@ def feat_eng(data):
                         tags_encoded_df.drop(columns = 'health'),
                         background_team_encoded_df,
                         industries_encoded_df,
-                        degree_team_encoded_df,
+                        # degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
                         investors_name_encoded_df,
@@ -326,7 +326,8 @@ def feat_eng(data):
 
 
     # selection of columns to keep
-    kept_tags = ['technical',
+    kept_tags = [
+                # 'technical',
                  'health',
                  'semiconductors',
                  'energy',
@@ -403,7 +404,7 @@ def feat_eng_new_entry(data):
     # encoded features
 
     background_team_encoded_df = encoder_predict(data, 'background_team', list_background_team)
-    degree_team_encoded_df = encoder_predict(data,'degree_team',list_degree_team)
+    # degree_team_encoded_df = encoder_predict(data,'degree_team',list_degree_team)
     industries_encoded_df = encoder_predict(data,'industries_list',list_industries)
     income_streams_encoded_df = encoder_predict(data,'income_streams',list_income_streams)
     technologies_encoded_df = encoder_predict(data,'technologies',list_technologies)
@@ -424,7 +425,7 @@ def feat_eng_new_entry(data):
                         tags_encoded_df.drop(columns = 'health'),
                         background_team_encoded_df,
                         industries_encoded_df,
-                        degree_team_encoded_df,
+                        # degree_team_encoded_df,
                         income_streams_encoded_df,
                         technologies_encoded_df,
                         investors_name_encoded_df,
@@ -443,7 +444,8 @@ def feat_eng_new_entry(data):
 
 
     # selection of columns to keep
-    kept_tags = ['technical',
+    kept_tags = [
+                # 'technical',
                  'health',
                  'semiconductors',
                  'energy',

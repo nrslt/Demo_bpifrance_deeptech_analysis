@@ -16,8 +16,8 @@ class Patent():
     def get_bulk_patents(self,data):
         '''return all patents for companies by searching each companies' names in Big Query
            names needs to be harmonized with name_clean() before using this function'''
-        client = bigquery.Client(project='gold-hybrid-288409')
-        dataset_ref = client.dataset('bpius')
+        client = bigquery.Client() #project='gold-hybrid-288409'
+        # dataset_ref = client.dataset('bpius')
 
         #Empty df to put every searchings
         df = pd.DataFrame(columns=['id', 'id_patents', 'country_code', 'harmonized_assignee', 'top_terms', 'nb_similar'])

@@ -115,27 +115,22 @@ def getfulldata(company_csv_file, fields_txt_file):
     return data
 
 
-def bulk_search(**kwargs):
-    '''Bulk search is for searching multiple company by keywords in the name or the website'''
+# def bulk_search(**kwargs):
+#     '''Bulk search is for searching multiple company by keywords in the name or the website'''
 
-    env_path = os.path.join(os.path.dirname(__file__), ".env")
-    load_dotenv(dotenv_path = env_path)
-    APIKEY = os.getenv('DEALROOMAPIKEY')
-    URL = 'https://api.dealroom.co/api/v1/companies/bulk'
+#     env_path = os.path.join(os.path.dirname(__file__), ".env")
+#     load_dotenv(dotenv_path = env_path)
+#     APIKEY = os.getenv('DEALROOMAPIKEY')
+#     URL = 'https://api.dealroom.co/api/v1/companies/bulk'
 
-    response = requests.post(
-                        url = URL,\
-                        auth = (APIKEY, ''),\
-                        data = kwargs,
-                        headers={"Content-Type": "application/json"})
+#     response = requests.post( url = URL,auth = (APIKEY, ''),data = kwargs,headers= {"Content-Type": "application/json"} )
 
-
-    try :
-        data = response.json()['items']
-    except:
-        data = response.json()
-        return data
-    return pd.DataFrame(data)
+#     try :
+#         data = response.json()['items']
+#     except:
+#         data = response.json()
+#         return data
+#     return pd.DataFrame(data)
 
 
 def get_df(deep_csv, nondeep_csv, almostdeep_csv):
@@ -170,6 +165,24 @@ def get_df(deep_csv, nondeep_csv, almostdeep_csv):
     data.to_csv(f'{output_path}/complete_df.csv')
 
     return data
+
+def company_search(**kwargs):
+
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    load_dotenv(dotenv_path = env_path)
+    APIKEY = os.getenv('DEALROOMAPIKEY')
+    URL = 'https://api.dealroom.co/api/v1/companies'
+
+    response = requests.post(
+                        url = URL,\
+                        auth = (APIKEY, ''),\
+                        data = kwargs)
+
+    data = response.json()['items']
+
+    return pd.DataFrame(data).head(1)
+
+
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from google.cloud import bigquery
 
 
 class Patent():
+    '''Class to get patents from bigquery public patents dataset'''
 
     def __init__(self):
         pass

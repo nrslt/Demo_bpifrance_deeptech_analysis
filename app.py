@@ -16,7 +16,7 @@ def index():
 
 @app.route('/predict', methods=['GET'])
 def predict():
-    name = request.args['key']
+    name = request.args['name']
 
     # get nb of patents with Big Query
     patent = Patent()

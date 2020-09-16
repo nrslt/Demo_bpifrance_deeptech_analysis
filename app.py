@@ -27,22 +27,11 @@ def predict():
     if X.empty:
         return 'Company name not found on DealRoom'
     X['nb_patents'] = nb_patents
-    X = feat_eng_new_entry(X)
 
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
     return {"predictions": str(results[0])}
 
-    # TODO
-    # create an X_pred dataframe from request.args
-    # enrich with dealroom et google patent
-    # load model.joblib
-    # make a prediction
-    # return result
-    # y_pred = 3
-    # prediction_dict = { 'pred' : y_pred}
-    # return prediction_dict
-    # return json.dumps({'coucou' : 'yes'})
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

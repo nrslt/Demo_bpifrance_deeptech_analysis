@@ -37,7 +37,7 @@ def predict():
     print(f'X TYPE :  {type(X)}')
     print(f'ICCCCCCCI XXXXXX :  {X.iloc[1,-3:]}')
     print(f'ICCCCCCCI XXXXXX :  {nb_patents}')
-    print(f'ICCCCCCCI XXXXXX :  {X['nb_patents']}')
+    print(f'ICCCCCCCI XXXXXX :  {X["nb_patents"]}')
 
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)

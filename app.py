@@ -6,7 +6,6 @@ from flask import Flask
 from flask import request
 from bpideep.getpatent import Patent
 from bpideep.getdata import company_search
-from bpideep.feateng import feat_eng_new_entry
 
 app = Flask(__name__)
 
@@ -30,6 +29,7 @@ def predict():
 
     if X.empty:
         return 'Company name not found on DealRoom'
+
     X['nb_patents'] = nb_patents
 
     pipeline = joblib.load('bpideepmodel.joblib')

@@ -24,10 +24,13 @@ def predict():
 
     # get DealRoom datas
     X = company_search(name)
-    if X.empty:
-        return 'Company name not found on DealRoom'
+
     if isinstance(X,dict):
         return 'Problem with the Api key'
+
+    if X.empty:
+        return 'Company name not found on DealRoom'
+
 
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)

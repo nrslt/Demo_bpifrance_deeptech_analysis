@@ -16,7 +16,7 @@ def index():
 
 @app.route('/predict', methods=['GET'])
 def predict():
-    name = request.args['key']
+    name = request.args['name']
 
     # get nb of patents with Big Query
     patent = Patent()
@@ -24,6 +24,10 @@ def predict():
 
     # get DealRoom datas
     X = company_search(name)
+
+    if isinstance(X,dict):
+        return 'Problem with the Api key'
+
     if X.empty:
         return 'Company name not found on DealRoom'
     X['nb_patents'] = nb_patents
@@ -31,7 +35,6 @@ def predict():
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
     return {"predictions": str(results[0])}
-
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

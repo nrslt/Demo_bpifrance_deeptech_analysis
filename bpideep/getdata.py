@@ -212,10 +212,11 @@ def get_df(deep_csv, nondeep_csv, almostdeep_csv):
     return data
 
 def company_search(name):
-
+    # if local
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     load_dotenv(dotenv_path = env_path)
     APIKEY = os.getenv('DEALROOMAPIKEY')
+
     URL = 'https://api.dealroom.co/api/v1/companies'
     fields_list = fields_tolist('fields_list.txt')
     fields_string = ','.join(fields_list)
@@ -225,9 +226,13 @@ def company_search(name):
                         auth = (APIKEY, ''),\
                         data = {'keyword':name, 'keyword_type':"name", 'keyword_match_type':"exact", 'fields': fields_string})
 
-    data = response.json()['items']
+    try :
+        data = response.json()['items']
+        company = pd.DataFrame(data).head(1)
+    except:
+        company = response.json()
 
-    return pd.DataFrame(data).head(1)
+    return company
 
 
 # def bulk_search(**kwargs):

@@ -34,9 +34,9 @@ def predict():
 
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)
-    print(f'X TYPE :  {type(X)}')
-    print(f'ICCCCCCCI XXXXXX :  {X.iloc[1,-3:]}')
-    print(f'ICCCCCCCI XXXXXX :  {nb_patents}')
+
+    print(X.iloc[:,-3:]])
+
 
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)

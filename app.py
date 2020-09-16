@@ -21,7 +21,7 @@ def predict():
     # get nb of patents with Big Query
     patent = Patent()
     nb_patents = patent.get_nb_patents(name)
-    print(nb_patents)
+
     # get DealRoom datas
     X = company_search(name)
 
@@ -33,21 +33,10 @@ def predict():
 
 
     X['nb_patents'] = nb_patents
-    print(X.shape)
     X = feat_eng_new_entry(X)
-    print(X.shape)
-    print(X.iloc[:,-3:])
-
-
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
     return {"predictions": str(results[0])}
 
-
-
-# if __name__ == '__main__':
-#     import ipdb;
-
-#     ipdb.set_trace()
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

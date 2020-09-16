@@ -214,9 +214,6 @@ def company_search(name):
     load_dotenv(dotenv_path = env_path)
     APIKEY = os.getenv('DEALROOMAPIKEY')
 
-    #if API
-    # APIKEY = os.environ['DEALROOMAPIKEY']
-
     URL = 'https://api.dealroom.co/api/v1/companies'
     fields_list = fields_tolist('fields_list.txt')
     fields_string = ','.join(fields_list)

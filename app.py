@@ -34,6 +34,7 @@ def predict():
 
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)
+    print(X)
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
     return {"predictions": str(results[0])}

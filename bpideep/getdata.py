@@ -226,7 +226,7 @@ def company_search(name):
         data = response.json()['items']
         company = pd.DataFrame(data).head(1)
     except:
-        company = ''
+        company = response.json()
 
     return company
 

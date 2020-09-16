@@ -222,9 +222,13 @@ def company_search(name):
                         auth = (APIKEY, ''),\
                         data = {'keyword':name, 'keyword_type':"name", 'keyword_match_type':"exact", 'fields': fields_string})
 
-    data = response.json()['items']
+    try :
+        data = response.json()['items']
+        company = pd.DataFrame(data).head(1)
+    except:
+        company = ''
 
-    return pd.DataFrame(data).head(1)
+    return company
 
 
 # def bulk_search(**kwargs):

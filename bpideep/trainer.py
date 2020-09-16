@@ -1,5 +1,5 @@
 from bpideep.getdata import getjson, getfulldata
-from bpideep.feateng import feat_eng
+from bpideep.encoders import FeatEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.linear_model import LogisticRegression
@@ -13,6 +13,7 @@ import joblib
 
 
 class Trainer():
+
     def __init__(self, X, y):
         '''
         instantiate trainer object with X and y
@@ -26,6 +27,7 @@ class Trainer():
         '''
         create the pipeline and logisticregression model
         '''
+
         ratio_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='mean'),
                                 StandardScaler())
@@ -39,9 +41,10 @@ class Trainer():
              ("patents_preproc", patent_transformer, ['nb_patents'])], remainder = 'passthrough')
 
         pipemodel = Pipeline(steps=[
+                            ('featureencoder', FeatEncoder()),
                             ('features', features_transformer),
-                            ('model', LogisticRegression(solver = 'lbfgs'))],
-                                         )
+                            ('model', LogisticRegression(solver = 'lbfgs'))]
+                            )
         self.pipeline = pipemodel
 
 
@@ -63,12 +66,7 @@ if __name__ == "__main__":
 
     # importing data
     company_dict = getjson('deeptech.csv', 'non_deeptech.csv', 'almost_deeptech.csv')
-    data = getfulldata(company_dict, 'fields_list.txt')
-
-    # supposes that patents is stored as a 'patents.csv' file in /data/
-    df = feat_eng(data)
-    X = df.drop(columns = ['id','target'])
-    y = df['target']
+    X, y = getfulldata(company_dict, 'fields_list.txt')
 
     t = Trainer(X, y)
     t.train()

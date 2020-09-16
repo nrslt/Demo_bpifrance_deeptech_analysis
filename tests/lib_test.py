@@ -20,4 +20,4 @@ import pytest
 #     assert out.shape == (985, 119)
 
 def test_clean_data():
-    pass
+    assert True

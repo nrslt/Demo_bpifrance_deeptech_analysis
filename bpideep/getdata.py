@@ -209,11 +209,14 @@ def get_df(deep_csv, nondeep_csv, almostdeep_csv):
     return data
 
 def company_search(name):
+    # if local
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    load_dotenv(dotenv_path = env_path)
+    APIKEY = os.getenv('DEALROOMAPIKEY')
 
-    # env_path = os.path.join(os.path.dirname(__file__), ".env")
-    # load_dotenv(dotenv_path = env_path)
-    # APIKEY = os.getenv('DEALROOMAPIKEY')
-    APIKEY = os.environ['DEALROOMAPIKEY']
+    #if API
+    # APIKEY = os.environ['DEALROOMAPIKEY']
+
     URL = 'https://api.dealroom.co/api/v1/companies'
     fields_list = fields_tolist('fields_list.txt')
     fields_string = ','.join(fields_list)

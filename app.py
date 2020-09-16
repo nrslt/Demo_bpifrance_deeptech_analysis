@@ -34,11 +34,15 @@ def predict():
 
     X['nb_patents'] = nb_patents
     X = feat_eng_new_entry(X)
-
     pipeline = joblib.load('bpideepmodel.joblib')
     results = pipeline.predict(X)
     return {"predictions": str(results[0])}
 
 
+
+# if __name__ == '__main__':
+#     import ipdb;
+
+#     ipdb.set_trace()
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

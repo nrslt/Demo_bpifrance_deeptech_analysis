@@ -13,3 +13,4 @@ google-cloud-bigquery
 datetime
 sklearn
 joblib
+typed-ast==1.4.1

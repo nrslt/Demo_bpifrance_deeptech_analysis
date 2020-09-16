@@ -11,4 +11,5 @@ datetime
 scikit-learn
 joblib
 python-dotenv
+typed-ast==1.4.1
 

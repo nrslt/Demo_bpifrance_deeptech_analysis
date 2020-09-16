@@ -25,10 +25,10 @@ def predict():
     X = company_search(name)
 
     if isinstance(X,dict):
-        return 'Problem with the Api key'
+        return {"predictions": 'Problem with the Api key'}
 
     if X.empty:
-        return 'Company name not found on DealRoom'
+        return {"predictions": 'Company name not found on DealRoom'}
 
     X['nb_patents'] = nb_patents
 

@@ -170,10 +170,13 @@ def getfulldata(company_dict, fields_txt_file):
     data.drop_duplicates(subset = 'id', inplace = True)
     data.reset_index(drop = True, inplace = True)
 
+    X = data.drop(columns = 'target')
+    y = data['target']
+
     output_path = os.path.join(os.path.dirname(__file__), "rawdata")
     data.to_csv(f'{output_path}/data.csv', index = False)
 
-    return data
+    return X, y
 
 def get_df(deep_csv, nondeep_csv, almostdeep_csv):
     """ takes the three csv files names as arguments and concat the df, \

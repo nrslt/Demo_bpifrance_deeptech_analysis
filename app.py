@@ -21,7 +21,7 @@ def predict():
     # get nb of patents with Big Query
     patent = Patent()
     nb_patents = patent.get_nb_patents(name)
-
+    print(nb_patents)
     # get DealRoom datas
     X = company_search(name)
 
@@ -33,8 +33,9 @@ def predict():
 
 
     X['nb_patents'] = nb_patents
+    print(X.shape)
     X = feat_eng_new_entry(X)
-
+    print(X.shape)
     print(X.iloc[:,-3:])
 
 

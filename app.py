@@ -32,7 +32,7 @@ def predict():
     # pipeline = joblib.load('bpideepmodel.joblib')
     # results = pipeline.predict(X)
     # return {"predictions": str(results[0])}
-    return {"predictions": 3}
+    return {"predictions": nb_patents}
 
     # TODO
     # create an X_pred dataframe from request.args

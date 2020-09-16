@@ -3,7 +3,6 @@ pandas
 Flask==1.1.1
 Flask-Cors==3.0.8
 gunicorn==20.0.4
-ast
 numpy
 matplotlib
 requests

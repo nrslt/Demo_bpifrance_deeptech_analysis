@@ -7,7 +7,7 @@ from bpideep.list import list_industries,list_technologies,list_tags,list_backgr
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
-idzip_df = pd.read_csv(f"{data_path}/id_zip.csv", delimiter = ';')
+IDZIP_DF = pd.read_csv(f"{data_path}/id_zip.csv", delimiter = ';')
 
 KEPT_TAGS = [
             'technical_background',
@@ -364,6 +364,7 @@ def zip_code(data):
 
     data = data[simple_features]
 
+    idzip_df = IDZIP_DF.copy()
     idzip_df.set_index('id', inplace = True)
     hq_locations = data[['id', 'hq_locations']]
     def getzip(elt):

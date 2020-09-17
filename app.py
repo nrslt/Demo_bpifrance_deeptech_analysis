@@ -7,6 +7,7 @@ from flask import request
 from bpideep.getpatent import Patent
 from bpideep.getdata import company_search
 from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
+import pandas as pd
 
 app = Flask(__name__)
 

@@ -1,19 +1,22 @@
 from bpideep.getdata import getjson, getfulldata
-from bpideep.encoders import FeatEncoder
+from bpideep.feateng import zip_code
+from bpideep.encoders import FeatEncoder, LabFeatEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline, make_pipeline
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, RobustScaler
 from sklearn.metrics import classification_report
+from sklearn.linear_model import LogisticRegression
 import numpy as np
+import pandas as pd
 import joblib
-# import pandas as pd
+import os
+
+
 
 
 class Trainer():
-
     def __init__(self, X, y):
         '''
         instantiate trainer object with X and y
@@ -28,29 +31,21 @@ class Trainer():
         create the pipeline and logisticregression model
         '''
 
-        ratio_transformer = make_pipeline(
-                                SimpleImputer(missing_values=np.nan, strategy='mean'),
-                                RobustScaler())
-
         patent_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0),
                                 RobustScaler())
 
         features_transformer = ColumnTransformer(
-            [("ratio_preproc", ratio_transformer, ['funding_employees_ratio', 'stage_age_ratio']),
-             ("patents_preproc", patent_transformer, ['nb_patents'])], remainder = 'passthrough')
-
-        preprocessing = Pipeline(steps = [
-            ('featureencoder', FeatEncoder()),
-            ('features', features_transformer)
-            ])
+            [("column_filler", SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0), \
+                                    ['doctor_yesno', 'department']),
+             ("patents_preproc", patent_transformer, ['nb_patents'])], remainder = 'drop')
 
         pipemodel = Pipeline(steps=[
-                            ('preprocessing', preprocessing),
-                            ('model', LogisticRegression(solver = 'lbfgs'))]
+                            ('featureencoder', LabFeatEncoder()),
+                            ('features', features_transformer),
+                            ('model', LogisticRegression())]
                             )
         self.pipeline = pipemodel
-
 
     def train(self):
         self.set_pipeline()
@@ -61,8 +56,8 @@ class Trainer():
         '''
         Save the model into a .joblib
         '''
-        joblib.dump(self.pipeline, 'bpideepmodel.joblib')
-        print("bpideepmodel.joblib saved locally")
+        joblib.dump(self.pipeline, 'bpideepmodel_lab.joblib')
+        print("bpideepmodel_lab.joblib saved locally")
 
 
 

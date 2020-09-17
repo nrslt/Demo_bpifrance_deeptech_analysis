@@ -7,6 +7,7 @@ from bpideep.list import list_industries,list_technologies,list_tags,list_backgr
 
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
+idzip_df = pd.read_csv(f"{data_path}/id_zip.csv", delimiter = ';')
 
 KEPT_TAGS = [
             'technical_background',
@@ -20,6 +21,7 @@ KEPT_TAGS = [
              'fund_investors_type',
              'Agoranov_investors_name']
 
+TARGET_ZIP = [91, 38, 87, 35, 67]
 
 def return_list(data, column):
     list_ = []
@@ -343,4 +345,57 @@ def get_stage_age_ratio(data):
     data['stage_age_ratio'] = data[['year_of_existence','growth_stage_num']]\
                                 .apply(return_ratio,axis=1)
     return data['stage_age_ratio']
+
+
+def zip_code(data):
+    # new features in data as columns
+    # import ipdb; ipdb.set_trace()
+    data['degree'] = data['team'].map(lambda x:degree(x))
+    data['doctor_yesno'] = data['degree'].map(lambda x: degree_quant(x))
+
+    # merge concat_df with patents to get patents info
+    data = data.merge(patents_df[['nb_patents', 'id']], on = 'id', how = 'left')
+    simple_features = ['id',
+                        'hq_locations',
+                        'doctor_yesno',
+                        'nb_patents']
+
+    data = data[simple_features]
+
+    idzip_df.set_index('id', inplace = True)
+    hq_locations = data[['id', 'hq_locations']]
+    def getzip(elt):
+        if len(elt) == 0:
+            return None
+        else:
+            return elt[0]
+    hq_locations['hq_locations'] = hq_locations['hq_locations'].apply(lambda x: getzip(x))
+    hq_locations = hq_locations.dropna(axis=0, subset=['hq_locations'])
+    hq_df = pd.DataFrame(hq_locations['hq_locations'].to_list(), index=hq_locations['id'])
+    hq_df = hq_df[['zip']]
+    merged = hq_df.join(idzip_df).fillna(value = -1000)
+    merged_clean = merged
+    def convert(string):
+        try:
+            int(string)
+            n = string[0:2]
+            n = int(n)
+        except:
+            n = -1000
+        return n
+    merged_clean.zip = merged_clean.zip.apply(lambda x : convert(x))
+    merged_clean.ZIP = merged_clean.ZIP.apply(lambda x : int(str(x)[0:2] if x != 0 else 0))
+    merged_clean['zip_code'] = merged_clean.apply(max, axis = 1)
+    final = merged_clean.drop(columns=['zip', 'ZIP'])
+    df = data.set_index('id').join(final, how = 'left').fillna(value = -1)
+    df['zip_code'] = df['zip_code'].astype('int')
+    df.reset_index(inplace = True, drop = True)
+    df['department'] = df['zip_code'].apply(lambda x: 1 if (x in TARGET_ZIP) else 0)
+    df.drop(columns = ['zip_code'], inplace = True)
+
+    return df
+
+
+
+
 

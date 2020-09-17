@@ -36,21 +36,26 @@ def predict():
     X_time = pd.DataFrame(funding_amounts_employees(X), columns = ['funding_employees_ratio'])
     X_time['stage_age_ratio'] = get_stage_age_ratio(X)
 
+    # X_lab = [['nb_patents', 'doctor_yesno', 'zipcode']]
+    X_lab = X.copy()
+
     # importing models
     pipeline = joblib.load('bpideepmodel.joblib')
     model_time = joblib.load('bpideepmodel_time.joblib')
-    # model_lab = joblib.load('modellab.joblib')
+    model_lab = joblib.load('bpideepmodel_lab.joblib')
     # model_techno = joblib.load('modeltechno.joblib')
 
     # storing models results
     results = pipeline.predict(X)
     time_result = model_time.predict(X_time)
+    lab_result = model_lab.predict(X_lab)
     # lab_proba = model_lab.predictproba(Xlab)
     # techno_proba = model_techno.predictproba(Xtechno)
 
     return {
             "predictions": str(results[0]),
-            "time_predict": str(time_result[0])
+            "time_predict": str(time_result[0]),
+            "lab_predict": str(lab_result[0])
             }
 
 if __name__ == '__main__':

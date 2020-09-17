@@ -1,6 +1,6 @@
 from bpideep.getdata import getjson, getfulldata
-from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
-from bpideep.encoders import FeatEncoder
+from bpideep.feateng import zip_code
+from bpideep.encoders import FeatEncoder, LabFeatEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict
@@ -11,7 +11,8 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 import pandas as pd
 import joblib
-import statsmodels.formula.api as smf
+import os
+
 
 
 
@@ -30,17 +31,21 @@ class Trainer():
         create the pipeline and logisticregression model
         '''
 
-        ratio_transformer = make_pipeline(
-                                SimpleImputer(missing_values=np.nan, strategy='mean'),
-                                StandardScaler())
+        patent_transformer = make_pipeline(
+                                SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0),
+                                RobustScaler())
 
+        features_transformer = ColumnTransformer(
+            [("column_filler", SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0), \
+                                    ['doctor_yesno', 'department']),
+             ("patents_preproc", patent_transformer, ['nb_patents'])], remainder = 'drop')
 
         pipemodel = Pipeline(steps=[
-                            ('ratio_transformer', ratio_transformer),
+                            ('featureencoder', LabFeatEncoder()),
+                            ('features', features_transformer),
                             ('model', LogisticRegression())]
-                                         )
+                            )
         self.pipeline = pipemodel
-
 
     def train(self):
         self.set_pipeline()
@@ -51,8 +56,8 @@ class Trainer():
         '''
         Save the model into a .joblib
         '''
-        joblib.dump(self.pipeline, 'bpideepmodel_time.joblib')
-        print("bpideepmodel_time.joblib saved locally")
+        joblib.dump(self.pipeline, 'bpideepmodel_lab.joblib')
+        print("bpideepmodel_lab.joblib saved locally")
 
 
 
@@ -61,9 +66,6 @@ if __name__ == "__main__":
     # importing data
     company_dict = getjson('deeptech.csv', 'non_deeptech.csv', 'almost_deeptech.csv')
     X, y = getfulldata(company_dict, 'fields_list.txt')
-    X['funding_employees_ratio'] = funding_amounts_employees(X)
-    X['stage_age_ratio'] = get_stage_age_ratio(X)
-    X = X[['funding_employees_ratio', 'stage_age_ratio']]
 
     t = Trainer(X, y)
     t.train()

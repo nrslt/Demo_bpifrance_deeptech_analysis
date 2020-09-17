@@ -32,7 +32,7 @@ class Trainer():
 
         ratio_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='mean'),
-                                StandardScaler())
+                                RobustScaler())
 
 
         pipemodel = Pipeline(steps=[

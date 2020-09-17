@@ -38,17 +38,20 @@ def predict():
 
     # importing models
     pipeline = joblib.load('bpideepmodel.joblib')
-    # model_time = joblib.load('bpideepmodel_time.joblib')
+    model_time = joblib.load('bpideepmodel_time.joblib')
     # model_lab = joblib.load('modellab.joblib')
     # model_techno = joblib.load('modeltechno.joblib')
 
     # storing models results
     results = pipeline.predict(X)
-    # time_proba = model_time.predictproba(Xtime)
+    time_proba = model_time.predictproba(X_time)
     # lab_proba = model_lab.predictproba(Xlab)
     # techno_proba = model_techno.predictproba(Xtechno)
 
-    return {"predictions": str(results[0])}
+    return {
+            "predictions": str(results[0]),
+            "time_predict": str(time_proba[0])
+            }
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

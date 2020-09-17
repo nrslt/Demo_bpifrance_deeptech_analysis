@@ -59,7 +59,7 @@ def predict():
     # storing X preprocessed
     X_preproc_array = pipeline.named_steps['featureencoder'].transform(X)
     feat_list = pipeline.named_steps['featureencoder'].features_list
-    X_preproc = pd.DataFrame(X_preproc_array, columns = feat_list)
+    X_preproc = pd.DataFrame(X_preproc_array, columns = feat_list).fillna(0)
 
     result_proba = pipeline.predict_proba(X)
     time_result = model_time.predict_proba(X_time)

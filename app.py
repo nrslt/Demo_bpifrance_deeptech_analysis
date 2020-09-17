@@ -25,6 +25,12 @@ def predict():
 
     # get DealRoom datas
     X = company_search(name)
+    # try:
+    img = X['images'][0]['100x100']
+    # except:
+    #     img = X['images'][0]['74x74']
+    # else:
+    #     img = X['images'][0]['32x32']
 
     if isinstance(X,dict):
         return {"predictions": 'Problem with the Api key'}
@@ -59,7 +65,8 @@ def predict():
             "prediction_proba": str(result_proba[0][1]),
             "time_predict": str(time_result[0][1]),
             "lab_predict": str(lab_result[0][1]),
-            "X_preproc": X_preproc.to_dict()
+            "X_preproc": X_preproc.to_dict(),
+            "image": img
             }
 
 @app.route('/search', methods=['GET'])

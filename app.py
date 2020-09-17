@@ -48,13 +48,15 @@ def predict():
 
     # storing models results
     results = pipeline.predict(X)
+    result_proba = pipeline.predict_proba(X)
     time_result = model_time.predict_proba(X_time)
     lab_result = model_lab.predict_proba(X_lab)
     # lab_proba = model_lab.predictproba(Xlab)
     # techno_proba = model_techno.predictproba(Xtechno)
 
     return {
-            "predictions": str(results[0]),
+            "prediction": str(results[0]),
+            "prediction_proba": str(result_proba[0][1]),
             "time_predict": str(time_result[0][1]),
             "lab_predict": str(lab_result[0][1])
             }

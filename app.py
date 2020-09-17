@@ -25,12 +25,12 @@ def predict():
 
     # get DealRoom datas
     X = company_search(name)
-    try:
-        img = X['images'][0]['100x100']
-    except:
-        img = X['images'][0]['74x74']
-    else:
-        img = X['images'][0]['32x32']
+    # try:
+    img = X['images'][0]['100x100']
+    # except:
+    #     img = X['images'][0]['74x74']
+    # else:
+    #     img = X['images'][0]['32x32']
 
     if isinstance(X,dict):
         return {"predictions": 'Problem with the Api key'}

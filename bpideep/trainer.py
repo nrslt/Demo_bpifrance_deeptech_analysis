@@ -40,9 +40,13 @@ class Trainer():
             [("ratio_preproc", ratio_transformer, ['funding_employees_ratio', 'stage_age_ratio']),
              ("patents_preproc", patent_transformer, ['nb_patents'])], remainder = 'passthrough')
 
+        preprocessing = Pipeline(steps = [
+            ('featureencoder', FeatEncoder()),
+            ('features', features_transformer)
+            ])
+
         pipemodel = Pipeline(steps=[
-                            ('featureencoder', FeatEncoder()),
-                            ('features', features_transformer),
+                            ('preprocessing', preprocessing)
                             ('model', LogisticRegression(solver = 'lbfgs'))]
                             )
         self.pipeline = pipemodel

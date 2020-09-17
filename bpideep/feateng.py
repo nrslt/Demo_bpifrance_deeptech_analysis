@@ -8,6 +8,17 @@ from bpideep.list import list_industries,list_technologies,list_tags,list_backgr
 data_path = os.path.join(os.path.dirname(__file__), "data")
 patents_df = pd.read_csv(f"{data_path}/patents.csv")
 
+KEPT_TAGS = [
+            'technical_background',
+             'health_industry',
+             'semiconductors_industry',
+             'energy_industry',
+             'commission_income_streams',
+             'biotechnology_tags',
+             'neurology_tags',
+             'saas_tags',
+             'fund_investors_type',
+             'Agoranov_investors_name']
 
 
 def return_list(data, column):
@@ -300,19 +311,10 @@ def feat_eng_cols(data):
 
 
     # selection of columns to keep
-    kept_tags = [
-                'technical_background',
-                 'health_industry',
-                 'semiconductors_industry',
-                 'energy_industry',
-                 'commission_income_streams',
-                 'biotechnology_tags',
-                 'neurology_tags',
-                 'saas_tags',
-                 'fund_investors_type',
-                 'Agoranov_investors_name']
+    kept_tags = KEPT_TAGS
 
-    # check that all kept_tags are in concat_df columns
+    # necessary check that all kept_tags are in concat_df columns:
+    # useful in case new entry data is given and some tags of industries differ
     no_tags = [col for col in kept_tags if col not in concat_df.columns]
     if len(no_tags) != 0:
         for col in no_tags:

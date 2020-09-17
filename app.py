@@ -38,6 +38,7 @@ def predict():
 
     # X_lab = [['nb_patents', 'doctor_yesno', 'zipcode']]
     X_lab = X.copy()
+    X_lab['nb_patents'] = nb_patents
 
     # importing models
     pipeline = joblib.load('bpideepmodel.joblib')

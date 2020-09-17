@@ -44,13 +44,13 @@ def predict():
 
     # storing models results
     results = pipeline.predict(X)
-    time_proba = model_time.predictproba(X_time)
+    time_result = model_time.predict(X_time)
     # lab_proba = model_lab.predictproba(Xlab)
     # techno_proba = model_techno.predictproba(Xtechno)
 
     return {
             "predictions": str(results[0]),
-            "time_predict": str(time_proba[0])
+            "time_predict": str(time_result[0])
             }
 
 if __name__ == '__main__':

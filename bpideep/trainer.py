@@ -46,7 +46,7 @@ class Trainer():
             ])
 
         pipemodel = Pipeline(steps=[
-                            ('preprocessing', preprocessing)
+                            ('preprocessing', preprocessing),
                             ('model', LogisticRegression(solver = 'lbfgs'))]
                             )
         self.pipeline = pipemodel

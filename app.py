@@ -54,7 +54,7 @@ def predict():
 
     # storing models results
     results = pipeline.predict(X)
-    X_preproc = pipeline['preprocessing'].transform(X)
+    X_preproc = pipeline.named_steps['preprocessing'].transform(X)
     result_proba = pipeline.predict_proba(X)
     time_result = model_time.predict_proba(X_time)
     lab_result = model_lab.predict_proba(X_lab)

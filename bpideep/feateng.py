@@ -335,3 +335,12 @@ def get_kept_cols(data):
 def feat_eng(data):
     concat_df, kept_cols = feat_eng_cols(data)
     return concat_df
+
+def get_stage_age_ratio(data):
+    data['year'] = pd.DataFrame({'year': data['launch_year']})
+    data['year_of_existence'] = data['year'].map(lambda x : substract_date(x))
+    data['growth_stage_num'] = growth_stage_num(data)
+    data['stage_age_ratio'] = data[['year_of_existence','growth_stage_num']]\
+                                .apply(return_ratio,axis=1)
+    return data['stage_age_ratio']
+

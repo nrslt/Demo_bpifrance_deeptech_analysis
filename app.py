@@ -6,6 +6,7 @@ from flask import Flask
 from flask import request
 from bpideep.getpatent import Patent
 from bpideep.getdata import company_search
+from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
 
 app = Flask(__name__)
 
@@ -31,9 +32,21 @@ def predict():
         return {"predictions": 'Company name not found on DealRoom'}
 
     X['nb_patents'] = nb_patents
+    X_time = pd.DataFrame(funding_amounts_employees(X), columns = ['funding_employees_ratio'])
+    X_time['stage_age_ratio'] = get_stage_age_ratio(X)
 
+    # importing models
     pipeline = joblib.load('bpideepmodel.joblib')
+    # model_time = joblib.load('bpideepmodel_time.joblib')
+    # model_lab = joblib.load('modellab.joblib')
+    # model_techno = joblib.load('modeltechno.joblib')
+
+    # storing models results
     results = pipeline.predict(X)
+    # time_proba = model_time.predictproba(Xtime)
+    # lab_proba = model_lab.predictproba(Xlab)
+    # techno_proba = model_techno.predictproba(Xtechno)
+
     return {"predictions": str(results[0])}
 
 if __name__ == '__main__':

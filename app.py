@@ -54,9 +54,9 @@ def predict():
     # techno_proba = model_techno.predictproba(Xtechno)
 
     return {
-            "predictions": results[0],
-            "time_predict": time_result[0][1],
-            "lab_predict": lab_result[0][1]
+            "predictions": str(results[0]),
+            "time_predict": str(time_result[0][1]),
+            "lab_predict": str(lab_result[0][1])
             }
 
 if __name__ == '__main__':

@@ -354,8 +354,7 @@ def zip_code(data):
     data['doctor_yesno'] = data['degree'].map(lambda x: degree_quant(x))
 
     # merge concat_df with patents to get patents info
-    import ipdb; ipdb.set_trace()
-    if 'nb_patents' not in data.columns:
+    if 'nb_patents' not in data.columns.tolist():
         data = data.merge(patents_df[['nb_patents', 'id']], on = 'id', how = 'left')
 
     simple_features = ['id',

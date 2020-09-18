@@ -72,7 +72,9 @@ def predict():
             "time_predict": str(time_result[0][1]),
             "lab_predict": str(lab_result[0][1]),
             "X_preproc": X_preproc.to_dict(),
-            "image": img
+            "image": img,
+            "description": X['about'][0],
+            'tags': X['tags'][0]
             }
 
 @app.route('/search', methods=['GET'])

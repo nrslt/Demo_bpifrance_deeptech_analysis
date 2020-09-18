@@ -44,7 +44,7 @@ class Trainer():
         pipemodel = Pipeline(steps=[
                             ('featureencoder', FeatEncoder()),
                             ('features', features_transformer),
-                            ('model', LogisticRegression(solver = 'lbfgs'))]
+                            ('model', LogisticRegression(penalty = 'l1', C = 1.52))]
                             )
         self.pipeline = pipemodel
 

@@ -30,7 +30,7 @@ class Trainer():
 
         ratio_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='mean'),
-                                StandardScaler())
+                                RobustScaler())
 
         patent_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0),
@@ -43,7 +43,7 @@ class Trainer():
         pipemodel = Pipeline(steps=[
                             ('featureencoder', FeatEncoder()),
                             ('features', features_transformer),
-                            ('model', LogisticRegression(solver = 'lbfgs'))]
+                            ('model', LogisticRegression(penalty = 'l1', C = 1.52))]
                             )
         self.pipeline = pipemodel
 

@@ -9,6 +9,7 @@ from bpideep.getdata import company_search, bulk_search, company_search_fuzzy
 from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
 import pandas as pd
 
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -54,7 +55,12 @@ def predict():
 
     # storing models results
     results = pipeline.predict(X)
-    X_preproc = pipeline.named_steps['preprocessing'].transform(X)
+
+    # storing X preprocessed
+    X_preproc_array = pipeline.named_steps['featureencoder'].transform(X)
+    feat_list = pipeline.named_steps['featureencoder'].features_list
+    X_preproc = pd.DataFrame(X_preproc_array, columns = feat_list).fillna(0)
+
     result_proba = pipeline.predict_proba(X)
     time_result = model_time.predict_proba(X_time)
     lab_result = model_lab.predict_proba(X_lab)

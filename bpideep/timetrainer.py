@@ -32,18 +32,7 @@ class Trainer():
 
         ratio_transformer = make_pipeline(
                                 SimpleImputer(missing_values=np.nan, strategy='mean'),
-                                StandardScaler())
-
-        # constant_adder = make_pipeline(
-        #                         smf.tools.tools.add_constant(data, prepend=True, has_constant='skip')
-        #                          )
-
-        # features_transformer = ColumnTransformer(
-        #     ["constant_adder" ; constant_adder, x.columns)
-        #     ("feature_encoder"; FeatEncoder(), x.columns),
-        #     ("ratio_preproc", ratio_transformer, ['funding_employees_ratio', 'stage_age_ratio']),
-        #     ("patents_preproc", patent_transformer, ['nb_patents']),
-        #     ], remainder = 'passthrough')
+                                RobustScaler())
 
 
         pipemodel = Pipeline(steps=[

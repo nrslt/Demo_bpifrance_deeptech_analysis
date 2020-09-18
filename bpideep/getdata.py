@@ -234,6 +234,28 @@ def company_search(name):
 
     return company
 
+def company_search_fuzzy(name):
+    # if local
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    load_dotenv(dotenv_path = env_path)
+    APIKEY = os.getenv('DEALROOMAPIKEY')
+
+    URL = 'https://api.dealroom.co/api/v1/companies'
+    fields_list = fields_tolist('fields_list.txt')
+    fields_string = ','.join(fields_list)
+
+    response = requests.post(
+                        url = URL,\
+                        auth = (APIKEY, ''),\
+                        data = {'keyword':name, 'keyword_type':"name", 'keyword_match_type':"fuzzy", 'fields': fields_string})
+
+    try :
+        data = response.json()['items']
+        company = pd.DataFrame(data).head(1)
+    except:
+        company = response.json()
+
+    return company
 
 # def bulk_search(**kwargs):
 #     '''Bulk search is for searching multiple company by keywords in the name or the website'''
@@ -242,7 +264,7 @@ def company_search(name):
 #     APIKEY = os.getenv('DEALROOMAPIKEY')
 #     URL = 'https://api.dealroom.co/api/v1/companies/bulk'
 
-#     response = requests.post( url = URL,auth = (APIKEY, ''),data = kwargs,headers= {"Content-Type": "application/json"} )
+#     response = requests.post( url = URL,auth = (APIKEY, ''),data = kwargs, headers= {"Content-Type": "application/json"} )
 
 #     try :
 #         data = response.json()['items']
@@ -250,6 +272,39 @@ def company_search(name):
 #         data = response.json()
 #         return data
 #     return pd.DataFrame(data)
+
+def bulk_search(month, year):
+    '''Bulk search is for searching multiple company by keywords in the name or the website'''
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    load_dotenv(dotenv_path = env_path)
+    APIKEY = os.getenv('DEALROOMAPIKEY')
+    URL = 'https://api.dealroom.co/api/v1/companies/bulk'
+
+    response =  requests.post(
+                    url="https://api.dealroom.co/api/v1/companies/bulk",
+                    data=json.dumps({
+                    "form_data": {
+                    "must": {"last_round_year": f'{year}',
+                             "last_round_month": f'{month}',
+                        "hq_locations": "France"}
+                    },
+                    "limit": 100,
+                    "next_page_id": "",
+                    "fields": "id,name,fundings,launch_year"
+                }),
+                    headers={
+                      "Content-Type": "application/json"
+                    },
+                    auth=('ed9e55daea6d7c22647f70037e24ebaed82fff19', '')
+                )
+
+    try :
+        data = response.json()['items']
+    except:
+        data = response.json()
+        return data
+    return pd.DataFrame(data)
+
 
 if __name__ == "__main__":
 

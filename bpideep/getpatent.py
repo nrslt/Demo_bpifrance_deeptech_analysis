@@ -16,8 +16,7 @@ class Patent():
     def get_bulk_patents(self,data):
         '''return all patents for companies by searching each companies' names in Big Query
            names needs to be harmonized with name_clean() before using this function'''
-        client = bigquery.Client() #project='gold-hybrid-288409'
-        # dataset_ref = client.dataset('bpius')
+        client = bigquery.Client()
 
         #Empty df to put every searchings
         df = pd.DataFrame(columns=['id', 'id_patents', 'country_code', 'harmonized_assignee', 'top_terms', 'nb_similar'])
@@ -64,8 +63,7 @@ class Patent():
     def get_patents(self, company_name):
         '''Get patents informations for one company '''
         clean_name = company_name.replace('-', ' ').replace("'", '').upper()
-        client = bigquery.Client(project='gold-hybrid-288409')
-        dataset_ref = client.dataset('bpius')
+        client = bigquery.Client()
 
         sql = ( 'SELECT patents.publication_number, patents.country_code, ARRAY(SELECT name FROM UNNEST(patents.assignee_harmonized)), '
                 'google.top_terms, (SELECT COUNT(publication_number) FROM UNNEST(google.similar)) AS similar '
@@ -93,8 +91,7 @@ class Patent():
     def get_nb_patents(self, company_name):
         '''Get number of patents for one company '''
         clean_name = company_name.replace('-', ' ').replace("'", '').upper()
-        client = bigquery.Client(project='gold-hybrid-288409')
-        dataset_ref = client.dataset('bpius')
+        client = bigquery.Client()
 
         sql = ( 'SELECT COUNT(*) '
                 'FROM `patents-public-data.patents.publications_202004` AS patents '

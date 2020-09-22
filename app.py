@@ -9,7 +9,6 @@ from bpideep.getdata import company_search, bulk_search, company_search_fuzzy
 from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
 import pandas as pd
 
-
 app = Flask(__name__)
 
 @app.route('/')

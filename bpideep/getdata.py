@@ -173,8 +173,9 @@ def getfulldata(company_dict, fields_txt_file):
     X = data.drop(columns = 'target')
     y = data['target']
 
-    output_path = os.path.join(os.path.dirname(__file__), "rawdata")
-    data.to_csv(f'{output_path}/data.csv', index = False)
+    output_path = os.path.join(os.path.dirname(__file__), "data")
+    # data.to_csv(f'{output_path}/data.csv', index = False)
+    data.to_json(f'{output_path}/DEMO_data.csv', index = False)
 
     return X, y
 

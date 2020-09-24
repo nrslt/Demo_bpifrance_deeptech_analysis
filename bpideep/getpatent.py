@@ -95,7 +95,7 @@ class Patent():
 
         sql = ( 'SELECT COUNT(*) '
                 'FROM `patents-public-data.patents.publications_202004` AS patents '
-                'LEFT JOIN `patents-public-data.google_patents_research.publications_202004` AS google ON patents.publication_number = google.publication_number '
+                # 'LEFT JOIN `patents-public-data.google_patents_research.publications_202004` AS google ON patents.publication_number = google.publication_number '
                 f'WHERE "{clean_name}" in UNNEST(ARRAY(SELECT name FROM UNNEST(patents.assignee_harmonized)))' )
 
         query = client.query(sql)

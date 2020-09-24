@@ -8,6 +8,10 @@ from bpideep.getpatent import Patent
 from bpideep.getdata import company_search, bulk_search, company_search_fuzzy
 from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
 import pandas as pd
+import os
+
+data_path = os.path.join(os.path.dirname(__file__), "bpideep/data")
+DATA = pd.read_json(f"{data_path}/DEMO_data.json")
 
 app = Flask(__name__)
 
@@ -19,18 +23,12 @@ def index():
 def predict():
     name = request.args['name']
 
-    # get nb of patents with Big Query
-    patent = Patent()
-    nb_patents = patent.get_nb_patents(name)
-
-    # get DealRoom datas
-    X = company_search(name)
-    # try:
-    img = X['images'][0]['100x100']
-    # except:
-    #     img = X['images'][0]['74x74']
-    # else:
-    #     img = X['images'][0]['32x32']
+    # based on company name input, selects corresponding row in DATA
+    X = DATA[DATA['name']==name]
+    try:
+        img = X['images'][0]['100x100']
+    except:
+        img = 'No image available'
 
     if isinstance(X,dict):
         return {"predictions": 'Problem with the Api key'}
@@ -38,13 +36,10 @@ def predict():
     if X.empty:
         return {"predictions": 'Company name not found on DealRoom'}
 
-    X['nb_patents'] = nb_patents
     X_time = pd.DataFrame(funding_amounts_employees(X), columns = ['funding_employees_ratio'])
     X_time['stage_age_ratio'] = get_stage_age_ratio(X)
 
-    # X_lab = [['nb_patents', 'doctor_yesno', 'zipcode']]
     X_lab = X.copy()
-    X_lab['nb_patents'] = nb_patents
 
     # importing models
     pipeline = joblib.load('bpideepmodel.joblib')
@@ -65,6 +60,18 @@ def predict():
     lab_result = model_lab.predict_proba(X_lab)
     # techno_proba = model_techno.predictproba(Xtechno)
 
+    # getting company description
+    try:
+        company_description = X['about'][0]
+    except:
+        company_description = 'No description available'
+
+    # getting company tags
+    try:
+        company_tags = X['tags'][0]
+    except:
+        company_tags = 'No tags available'
+
     return {
             "prediction": str(results[0]),
             "prediction_proba": str(result_proba[0][1]),
@@ -72,8 +79,8 @@ def predict():
             "lab_predict": str(lab_result[0][1]),
             "X_preproc": X_preproc.to_dict(),
             "image": img,
-            "description": X['about'][0],
-            'tags': X['tags'][0]
+            "description": company_description,
+            'tags': company_tags
             }
 
 @app.route('/search', methods=['GET'])

@@ -10,8 +10,14 @@ from bpideep.feateng import funding_amounts_employees, get_stage_age_ratio
 import pandas as pd
 import os
 
+# reading demo data
 data_path = os.path.join(os.path.dirname(__file__), "bpideep/data")
 DATA = pd.read_json(f"{data_path}/DEMO_data.json")
+
+MAY_2019 = pd.read_csv(f"{data_path}/DEMO_may_2019.csv", index_col = 0)
+MAY_2020 = pd.read_csv(f"{data_path}/DEMO_may_2020.csv", index_col = 0)
+SEP_2019 = pd.read_csv(f"{data_path}/DEMO_september_2019.csv", index_col = 0)
+SEP_2020 = pd.read_csv(f"{data_path}/DEMO_september_2020.csv", index_col = 0)
 
 app = Flask(__name__)
 
@@ -26,9 +32,9 @@ def predict():
     # based on company name input, selects corresponding row in DATA
     X = DATA[DATA['name']==name]
     try:
-        img = X['images'][0]['100x100']
+        img = X['images'].iloc[0]['100x100']
     except:
-        img = 'No image available'
+        img = 'No image currently available'
 
     if isinstance(X,dict):
         return {"predictions": 'Problem with the Api key'}
@@ -62,13 +68,13 @@ def predict():
 
     # getting company description
     try:
-        company_description = X['about'][0]
+        company_description = X['about'].iloc[0]
     except:
         company_description = 'No description available'
 
     # getting company tags
     try:
-        company_tags = X['tags'][0]
+        company_tags = X['tags'].iloc[0]
     except:
         company_tags = 'No tags available'
 
@@ -89,35 +95,22 @@ def search():
     year = request.args['year']
     month = request.args['month']
 
-    # return a df with name and funding_amount  for 10 highest fundings
-    df = bulk_search(month, year)
-    df = df[df.launch_year > 2010]
-    df['amount'] = df.fundings.apply(lambda x : x['items'][0]['amount'])
-    df = df.sort_values('amount', ascending=False).head(10)
-    df = df[['name', 'amount']]
+    search_data = {
+            'MAY_2019': MAY_2019,
+            'MAY_2020': MAY_2020,
+            'SEP_2019': SEP_2019,
+            'SEP_2020': SEP_2020
+    }
 
+    search_df = search_data[f'{month}_{year}']
 
-    # for every name in df predict deeptech or not deeptech
-    results_dic = {'name' : [], 'amount':[],'prediction':[]}
+    search_dict = {
+        'amount': search_df['amount'].tolist(),
+        'name': search_df['name'].tolist(),
+        'prediction': search_df['prediction'].tolist()
+    }
 
-    for i in df.index:
-        name = df.loc[i,'name']
-        amount = df.loc[i,'amount']
-
-        patent = Patent()
-        nb_patents = patent.get_nb_patents(name)
-        X = company_search(name)
-        if X.empty:
-            X = company_search_fuzzy(name)
-        X['nb_patents'] = nb_patents
-        pipeline = joblib.load('bpideepmodel.joblib')
-        results = pipeline.predict(X)
-
-        results_dic['name'].append(str(name))
-        results_dic['amount'].append(str(amount))
-        results_dic['prediction'].append(str(results[0]))
-
-    return results_dic
+    return search_dict
 
 
 if __name__ == '__main__':

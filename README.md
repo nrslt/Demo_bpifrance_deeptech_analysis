@@ -1,70 +1,9 @@
-# Data analysis
-- Document here the project: bpideep
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+# Project description
+The aim of this 10-days project was to answer a business need from BPI France data team, that needed an MVP to build upon that would be used to classify start-ups between 'deeptech' and 'non-deeptech'. Such classification was defined by BPI France team.
 
-Please document the project the better you can.
+The project relies principally on data from Dealroom API as well as Google Patents data.
 
-# Stratup the project
+We took on developing and training a logistic regression model to perform such classification. We also built a simple web-app (MVP) with Streamlit, and the code was then deployed on Heroku.
 
-The initial setup.
-
-Create virtualenv and install the project:
-```bash
-  $ sudo apt-get install virtualenv python-pip python-dev
-  $ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
-
-Unittest test:
-```bash
-  $ make clean install test
-```
-
-Check for bpideep in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/bpideep`
-- Then populate it:
-
-```bash
-  $ ##   e.g. if group is "{group}" and project_name is "bpideep"
-  $ git remote add origin git@gitlab.com:{group}/bpideep.git
-  $ git push -u origin master
-  $ git push -u origin --tags
-```
-
-Functionnal test with a script:
-```bash
-  $ cd /tmp
-  $ bpideep-run
-```
-# Install
-Go to `gitlab.com/{group}/bpideep` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-```bash
-  $ sudo apt-get install virtualenv python-pip python-dev
-  $ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-```bash
-  $ git clone gitlab.com/{group}/bpideep
-  $ cd bpideep
-  $ pip install -r requirements.txt
-  $ make clean install test                # install and test
-```
-Functionnal test with a script:
-```bash
-  $ cd /tmp
-  $ bpideep-run
-```
-
-# Continus integration
-## Github
-Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
-## Gitlab
-Every push of `master` branch will execute `.gitlab-ci.yml` docker jobs.
+# Disclaimer
+This project is only presented here for pedagogical purpose and to display a 10-days long data science project. It was the result of a voluntary collaboration between students at Le Wagon Data Science Bootcamp and BPI France.

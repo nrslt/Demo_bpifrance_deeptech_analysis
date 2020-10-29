@@ -5,5 +5,7 @@ The project relies principally on data from Dealroom API as well as Google Paten
 
 We took on developing and training a logistic regression model to perform such classification. We also built a simple web-app (MVP) with Streamlit, and the code was then deployed on Heroku.
 
+The resulting MVP is accessible here: https://bpideeptechdemo.herokuapp.com/
+
 # Disclaimer
 This project is only presented here for pedagogical purpose and to display a 10-days long data science project. It was the result of a voluntary collaboration between students at Le Wagon Data Science Bootcamp and BPI France.
